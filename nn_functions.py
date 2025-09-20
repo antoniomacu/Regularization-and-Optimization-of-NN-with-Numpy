@@ -288,7 +288,7 @@ def backward_prop(AL, Y, caches):
     """
     Arguments:
     AL -- probability vector, output of the forward propagation (L_model_forward())
-    Y -- true "label" vector (containing 0 if non-cat, 1 if cat)
+    Y -- true "label" vector (containing 0 if False, 1 if True)
     caches -- list of caches containing:
                 every cache of linear_activation_forward() with "relu" (it's caches[l], for l in range(L-1) i.e l = 0...L-2)
                 the cache of linear_activation_forward() with "sigmoid" (it's caches[L-1])
