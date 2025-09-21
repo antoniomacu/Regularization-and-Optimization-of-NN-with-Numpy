@@ -2,7 +2,7 @@
 # be generated, for the consecutive deployment and reuse
 
 import numpy as np
-import nn_functions
+from nn_functions import *
 import math
 
 # 1. Initialization of parameters (Weights - W and Biases - B)
