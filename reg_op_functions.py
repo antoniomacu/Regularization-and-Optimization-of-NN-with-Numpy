@@ -477,3 +477,11 @@ def schedule_lr_decay(learning_rate0, epoch_num, decay_rate, time_interval=1000)
     learning_rate = 1 / (1 + decay_rate * np.floor(epoch_num / time_interval)) * learning_rate0
     
     return learning_rate
+
+# It is also available to use: Exponential Learning Rate Decay:
+
+def exp_lr_decay(learning_rate0, epoch_num, decay_rate):
+
+    learning_rate = learning_rate0 * np.exp(-decay_rate * epoch_num)
+
+    return learning_rate
