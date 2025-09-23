@@ -143,7 +143,7 @@ def backward_prop_with_l2_reg(AL, Y, caches, lambd, parameters):
     for l in reversed(range(L-1)):
 
         current_cache = caches[l]
-        dA_prev_temp, dW_temp, db_temp = linear_activation_backward(grads["dA" + str(l + 1)], current_cache, activation='relu') + (lambd / m) * parameters['W' + str(l)]
+        dA_prev_temp, dW_temp, db_temp = linear_activation_backward(grads["dA" + str(l + 1)], current_cache, activation='relu') 
         dW_temp = dW_temp + (lambd / m) * parameters['W' + str(l + 1)]
         grads["dA" + str(l)] = dA_prev_temp
         grads["dW" + str(l + 1)] = dW_temp
