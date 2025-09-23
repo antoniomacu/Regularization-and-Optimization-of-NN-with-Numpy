@@ -197,7 +197,7 @@ def forward_propagation_with_dropout(X, parameters, keep_prob = 0.5):
     return AL, caches
 
 
-def backward_prop(AL, Y, caches, keep_prob):
+def backward_prop_with_dropout(AL, Y, caches, keep_prob):
     """
     Arguments:
     AL -- probability vector, output of the forward propagation (L_model_forward())
@@ -359,7 +359,7 @@ def update_parameters_with_momentum(parameters, grads, v, beta, learning_rate):
     return parameters, v
 
 
-# 3.1 Adam: this technique is also an exponential weigthed average technique, in this case combines
+# 3.3 Adam: this technique is also an exponential weigthed average technique, in this case combines
 #     Momentum with RMSProp (Root Mean Square Propagation) and includes a bias correction.
 #     RMSprop - it calculates exponential weighted average of the squares of the past gradients.
 
@@ -454,3 +454,26 @@ def update_parameters_with_adam(parameters, grads, v, s, t, learning_rate = 0.01
         parameters["b" + str(l)] = parameters["b" + str(l)] - learning_rate * (v_corrected["db" + str(l)] / (np.sqrt(s_corrected["db" + str(l)]) + epsilon))
 
     return parameters, v, s, v_corrected, s_corrected
+
+
+# 3.4 Learning rate decay - this is to tune the learning rate hyperparameter so when the gradient descent approaches to the minimum the model can converge
+#     without making wide oscillations.
+#     The implementation is an Scheduled Learning Rate decay as it follows:
+#     alpha = (1 / (1 + decay rate * |epoch Number / time Interval|) * original learning rate
+
+def schedule_lr_decay(learning_rate0, epoch_num, decay_rate, time_interval=1000):
+    """
+    Calculates updated the learning rate using exponential weight decay.
+    
+    Arguments:
+    learning_rate0 -- Original learning rate. Scalar
+    epoch_num -- Epoch number. Integer.
+    decay_rate -- Decay rate. Scalar.
+    time_interval -- Number of epochs where you update the learning rate.
+
+    Returns:
+    learning_rate -- Updated learning rate. Scalar 
+    """
+    learning_rate = 1 / (1 + decay_rate * np.floor(epoch_num / time_interval)) * learning_rate0
+    
+    return learning_rate
