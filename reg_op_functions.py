@@ -225,13 +225,16 @@ def backward_prop_with_dropout(AL, Y, caches, keep_prob):
     # Hidden layers (ReLU + dropout)
     for l in reversed(range(L-1)):
         cache, D = caches[l]
-        dA_prev_temp, dW_temp, db_temp = linear_activation_backward(grads["dA" + str(l + 1)], cache, activation='relu')
-        dA_prev_temp = dA_prev_temp * D                     # Step 1: Apply mask D2 to shut down the same neurons as during the forward propagation
-        dA_prev_temp = dA_prev_temp / keep_prob             # Step 2: Scale the value of neurons that haven't been shut down
+        dA = grads["dA" + str(l + 1)]
+        if D is not None:
+            if dA.shape != D.shape:
+                raise ValueError(f"Shape mismatch: dA {dA.shape}, D {D.shape} at layer {l}")
+            dA = dA * D
+            dA = dA / keep_prob
+        dA_prev_temp, dW_temp, db_temp = linear_activation_backward(dA, cache, activation='relu')
         grads["dA" + str(l)] = dA_prev_temp
         grads["dW" + str(l + 1)] = dW_temp
         grads["db" + str(l + 1)] = db_temp
-
     return grads
 
 
