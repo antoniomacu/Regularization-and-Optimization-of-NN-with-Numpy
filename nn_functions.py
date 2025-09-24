@@ -348,3 +348,31 @@ def update_parameters(params, grads, learning_rate):
         parameters["b" + str(l+1)] = params['b' + str(l+1)] - learning_rate * grads["db" + str(l+1)]
         
     return parameters
+
+
+# 13. Implement prediction function to compute the predictions and accuracy of the model.
+#     This is done by doing a last forward propagation in the last parameters obtained 
+#     after gradient descent
+
+def predict(X, Y, parameters):
+    """
+    Predict using the learned parameters and return accuracy.
+    Arguments:
+    X -- input data, shape (features, samples)
+    Y -- true labels, shape (1, samples)
+    parameters -- learned parameters from training
+
+    Returns:
+    predictions -- binary predictions (0/1)
+    accuracy -- percentage of correct predictions
+    """
+    # Use standard forward propagation (no dropout) for predictions
+    AL, _ = forward_prop(X, parameters)
+
+    # Convert probabilities to binary predictions (0/1)
+    predictions = (AL > 0.5).astype(int)
+
+    # Compute accuracy
+    accuracy = np.mean(predictions == Y) * 100
+
+    return predictions, accuracy
